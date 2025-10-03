@@ -27,9 +27,9 @@ pipeline {
                         passwordVariable: 'pass'
                     )
                 ]) {
-                    bat "docker login -u  %user_name% --password-stdin"
+                    bat "docker login -u  %user_name% -p %pass%"
                     bat "docker tag %IMAGE_NAME%:%IMAGE_TAG% %user_name%/%REPO_NAME%:%IMAGE_TAG%"
-                    bat "docker push %user_name%/%IMAGE_NAME%:%IMAGE_TAG%"
+                    bat "docker push %user_name%/%REPO_NAME%:%IMAGE_TAG%"
                 }
             }
         }
