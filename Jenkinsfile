@@ -11,14 +11,8 @@ pipeline {
                 git branch: 'main', changelog: false, poll: false, url: 'https://github.com/jesmigeorge/Python_Pipeline.git'
             }
         }
-        
-        stage('Build Docker Image') {
-            steps {
-                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
-            }
-        }
 
-        stage('Login and Push Docker Image to DockerHub From Jenkins') {
+        stage('Login to DockerHub.Build and Push Docker Image From Jenkins') {
             steps{
                 withCredentials([
                     usernamePassword(
@@ -28,7 +22,8 @@ pipeline {
                     )
                 ]) {
                     bat "docker login -u  %user_name% -p %pass%"
-                    bat "docker tag %IMAGE_NAME%:%IMAGE_TAG% %user_name%/%REPO_NAME%:%IMAGE_TAG%"
+                    echo "%user_name%"
+                    bat "docker build -t %user_name%/%REPO_NAME%:%IMAGE_TAG%"
                     bat "docker push %user_name%/%REPO_NAME%:%IMAGE_TAG%"
                 }
             }
