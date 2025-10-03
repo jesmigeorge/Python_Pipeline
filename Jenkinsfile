@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        REPO_NAME = "pypipe"
+        REPO_NAME = "pipeline_test"
         IMAGE_NAME = "pyjenks"
         IMAGE_TAG = "1.1"
     }
