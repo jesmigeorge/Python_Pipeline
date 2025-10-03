@@ -28,6 +28,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', passwordVariable: 'passWord', usernameVariable: 'userName')]) 
                     {
+                        bat "echo %passWord% | docker login -u %userName% --password-stdin"
                         bat "docker push %userName%/%REPO_NAME%:%IMAGE_TAG%"
                     }
                 }
