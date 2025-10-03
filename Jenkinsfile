@@ -17,7 +17,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', passwordVariable: 'passWord', usernameVariable: 'userName')]) 
                     {
-                        bat "docker build -t ${dockerhubUser}/${REPO_NAME}:${IMAGE_TAG} ."
+                        bat "docker build -t %userName%/%REPO_NAME%:%IMAGE_TAG% ."
                     }
                 }
             }
