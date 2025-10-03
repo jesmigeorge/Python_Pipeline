@@ -11,11 +11,24 @@ pipeline {
             }
         }
         
-        stage('Build and Push Docker Image') {
+        stage('Build Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker_access_token', url: '']) {
-                    bat "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
-                    bat "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
+            }
+        }
+
+        stage('Login and Push Docker Image to DockerHub From Jenkins') {
+            steps{
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'user_name',
+                        passwordVariable: 'pass'
+                    )
+                ]) {
+                    bat "docker login -u  %user_name% -p %pass%"
+                    bat "docker tag %IMAGE_NAME%:%IMAGE_TAG% %user_name%/%IMAGE_NAME%:%IMAGE_TAG%"
+                    bat "docker push %user_name%/%IMAGE_NAME%:%IMAGE_TAG%"
                 }
             }
         }
