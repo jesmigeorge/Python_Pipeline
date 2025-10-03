@@ -22,8 +22,8 @@ pipeline {
                     )
                 ]) {
                     bat "docker login -u  %user_name% -p %pass%"
-                    echo "%user_name%"
-                    bat "docker build -t %user_name%/%REPO_NAME%:%IMAGE_TAG%"
+                    echo user_name
+                    bat "docker build -t %user_name%/%REPO_NAME%:%IMAGE_TAG% ."
                     bat "docker push %user_name%/%REPO_NAME%:%IMAGE_TAG%"
                 }
             }
