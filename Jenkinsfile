@@ -19,7 +19,7 @@ pipeline {
         
         stage('Push Docker Image to DockerHub Registry') {
             steps {
-                withDockerRegistry(credentialsId: '001a578f-c348-42ec-95a2-ef6cb053f9c9', toolName: 'docker') {
+                withDockerRegistry(credentialsId: '001a578f-c348-42ec-95a2-ef6cb053f9c9', url:'') {
                     bat "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
                 }
             }
