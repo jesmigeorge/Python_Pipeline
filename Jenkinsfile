@@ -34,20 +34,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Login to DockerHub.Build and Push Docker Image From Jenkins') {
-        //     steps {
-        //         script { 
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', passwordVariable: 'passWord', usernameVariable: 'userName')]) 
-        //             {
-        //                 bat "echo ${dockerhubPass} | docker login -u ${dockerhubUser} --password-stdin"
-        //                 echo "Building Docker image: ${dockerhubUser}/${REPO_NAME}:${IMAGE_TAG}"
-                        
-        //                 bat "docker push ${dockerhubUser}/${REPO_NAME}:${IMAGE_TAG}"
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
 s
