@@ -11,14 +11,10 @@ pipeline {
             }
         }
         
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
-                bat "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
-            }
-        }
-        stage('Push Docker Image to DockerHub') {
-            steps {
-                withDockerRegistry([ credentialsId: 'docker_access_token', url: '' ]) {
+                withDockerRegistry([credentialsId: 'docker_access_token', url: '']) {
+                    bat "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
                     bat "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
                 }
             }
