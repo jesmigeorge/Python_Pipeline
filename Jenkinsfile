@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REPO = "jesmigeorge/pipeline_test"
-        IMAGE_TAG = "pypipe_1"
+        IMAGE_NAME = "pyjenksImg"
+        IMAGE_TAG = "latest"
     }
     stages {
         stage('Git Checkout') {
@@ -13,13 +13,22 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
+                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
             }
         }
-        stage('Push Docker Image to DockerHub') {
-            steps {
-                withDockerRegistry([ credentialsId: 'docker_access_token', url: '' ]) {
-                    bat "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
+
+        stage('Login and Push Docker Image to DockerHub From Jenkins') {
+            steps{
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'user_name',
+                        passwordVariable: 'pass'
+                    )
+                ]) {
+                    bat "docker login -u  %user_name% -p %pass%"
+                    bat "docker tag %IMAGE_NAME%:%IMAGE_TAG% %user_name%/%IMAGE_NAME%:%IMAGE_TAG%"
+                    bat "docker push %user_name%/%IMAGE_NAME%:%IMAGE_TAG%"
                 }
             }
         }
