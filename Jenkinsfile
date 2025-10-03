@@ -16,10 +16,9 @@ pipeline {
                 bat "docker build -t ${DOCKER_REPO}:${IMAGE_TAG} ."
             }
         }
-        
-        stage('Push Docker Image to DockerHub Registry') {
+        stage('Push Docker Image to DockerHub') {
             steps {
-                withDockerRegistry(credentialsId: '001a578f-c348-42ec-95a2-ef6cb053f9c9', url:'') {
+                withDockerRegistry([ credentialsId: 'docker_access_token', url: '' ]) {
                     bat "docker push ${DOCKER_REPO}:${IMAGE_TAG}"
                 }
             }
