@@ -13,7 +13,7 @@ pipeline {
         }
 
         stage('Login to DockerHub.Build and Push Docker Image From Jenkins') {
-            steps{
+            steps {
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-creds',
@@ -21,13 +21,12 @@ pipeline {
                         passwordVariable: 'pass'
                     )
                 ]) {
-                    bat "docker login -u  %user_name% -p %pass%"
-                    echo user_name
-                    bat "docker build -t %user_name%/%REPO_NAME%:%IMAGE_TAG% ."
-                    bat "docker push %user_name%/%REPO_NAME%:%IMAGE_TAG%"
+                    bat "echo %pass% | docker login -u ${user_name} --password-stdin"
+                    echo "Building Docker image: ${user_name}/${REPO_NAME}:${IMAGE_TAG}"
+                    bat "docker build -t ${user_name}/${REPO_NAME}:${IMAGE_TAG} ."
+                    bat "docker push ${user_name}/${REPO_NAME}:${IMAGE_TAG}"
                 }
             }
         }
     }
 }
-
